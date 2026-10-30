@@ -1,0 +1,22 @@
+- name: workspace-cleanup
+  taskSpec:
+    steps:
+      - name: cleanup
+        image: alpine:latest
+        script: |
+          #!/bin/sh
+          echo "Cleaning up workspace and removing old artifacts..."
+          rm -rf /workspace/output/*
+
+- name: run-tests
+  taskSpec:
+    steps:
+      - name: nosetests
+        image: python:3.11-slim
+        script: |
+          #!/usr/bin/env python3
+          import subprocess
+          import sys
+          print("Running unit tests with nosetests...")
+          result = subprocess.run(["nosetests", "-v", "--with-spec", "--spec-color"])
+          sys.exit(result.returncode)
